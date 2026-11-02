@@ -151,7 +151,7 @@ Frontend dependencies are declared in `package.json` and locked in `package-lock
 └── vite.config.ts
 ```
 
-The local `.env` file is Git-ignored and is not included in the tree. Generated output, installed dependencies, and caches such as `dist/`, `node_modules/`, `.venv/`, `.pytest_cache/`, and `__pycache__/` are also excluded.
+
 
 ## Getting started
 
