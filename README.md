@@ -300,7 +300,6 @@ ELASTICOPS_QUERY_PASSWORD=<strong-operator-password>
 ELASTICOPS_SEED_SAMPLE_DATA=false
 ```
 
-Production Elasticsearch connections must use HTTPS and an API key. Set `ELASTICSEARCH_CA_CERTS` when a custom CA certificate is needed. Keep real credentials out of source control; `.env` is ignored by Git. Configure TLS termination, access controls, monitoring, and backups before exposing the application. Do not expose Elasticsearch port 9200 publicly.
 
 ## Tests and build
 
@@ -312,7 +311,7 @@ npm ci
 npm run build
 ```
 
-The GitHub Actions workflow runs the backend tests and frontend build on pushes and pull requests.
+
 
 ## License
 
