@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    volumes:
+      - huggingface_cache:/home/elasticops/.cache/huggingface
+    environment:
+      APP_ENV: production
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:?Set ELASTICSEARCH_URL}
+      ELASTICSEARCH_API_KEY: ${ELASTICSEARCH_API_KEY:?Set ELASTICSEARCH_API_KEY}
+      ELASTICOPS_QUERY_API_KEY: ${ELASTICOPS_QUERY_API_KEY:?Set ELASTICOPS_QUERY_API_KEY}
+      ELASTICOPS_INGEST_API_KEY: ${ELASTICOPS_INGEST_API_KEY:?Set ELASTICOPS_INGEST_API_KEY}
+      ELASTICOPS_QUERY_SESSION_SECRET: ${ELASTICOPS_QUERY_SESSION_SECRET:?Set ELASTICOPS_QUERY_SESSION_SECRET}
+      ELASTICOPS_QUERY_USERNAME: ${ELASTICOPS_QUERY_USERNAME:-}
+      ELASTICOPS_QUERY_PASSWORD: ${ELASTICOPS_QUERY_PASSWORD:-}
+      ELASTICOPS_SEED_SAMPLE_DATA: "false"
+      ELASTICSEARCH_NUMBER_OF_SHARDS: ${ELASTICSEARCH_NUMBER_OF_SHARDS:-3}
+      ELASTICSEARCH_NUMBER_OF_REPLICAS: ${ELASTICSEARCH_NUMBER_OF_REPLICAS:-1}
+      ELASTICSEARCH_CA_CERTS: ${ELASTICSEARCH_CA_CERTS:-}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "80:80"
+
+volumes:
+  huggingface_cache:
+
